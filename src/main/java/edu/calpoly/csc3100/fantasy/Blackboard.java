@@ -25,6 +25,10 @@ public final class Blackboard extends PropertyChangeSupport {
     PlayerState previous = players.put(state.player(), state);
     firePropertyChange(new java.beans.PropertyChangeEvent(this, PLAYERS, previous, state));
   }
+  private void commitLocal(PlayerState state) {
+    store(state);
+    publisher.publish(state);
+  }
   public PlayerState getPlayer(String username) { return players.get(username); }
   public Collection<PlayerState> players() { return List.copyOf(players.values()); }
   public void addLocalPlayer(PlayerState state) {
@@ -33,8 +37,17 @@ public final class Blackboard extends PropertyChangeSupport {
     publisher.publish(state);
   }
   public void moveLocal(String username, int dx, int dy) {
-    // TODO: move only the local player one cardinal tile within the board.
-    // Store the changed snapshot and publish it once.
+    if (!username.equals(localUsername)) return;
+    if (dx < -1 || dx > 1 || dy < -1 || dy > 1) return;
+    if ((dx == 0) == (dy == 0)) return;
+
+    PlayerState current = players.get(username);
+    if (current == null) return;
+    int newX = current.x() + dx;
+    int newY = current.y() + dy;
+    if (newX < 0 || newX >= COLUMNS || newY < 0 || newY >= ROWS) return;
+    PlayerState updated = new PlayerState(username,current.type(), newX, newY, current.equipment());
+    commitLocal(updated);
   }
 
   public void applyRemote(PlayerState state) {
