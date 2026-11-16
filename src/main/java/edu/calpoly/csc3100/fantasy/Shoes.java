@@ -2,7 +2,7 @@ package edu.calpoly.csc3100.fantasy;
 
 /**
  * Visual footwear that preserves the wrapped character’s stats.
- * @author CSC 3100 Instructional Team
+ * @author Marcus Hauen-Limkilde
  * @version 1.0
  */
 public final class Shoes implements Character {
@@ -10,7 +10,9 @@ public final class Shoes implements Character {
   public Shoes(Character wrapped) { this.wrapped = java.util.Objects.requireNonNull(wrapped); }
   @Override public void draw(java.awt.Graphics2D g, int x, int y) {
     wrapped.draw(g, x, y);
-    // TODO: draw a visible pair of shoes below the body, within the tile.
+    g.setColor(java.awt.Color.DARK_GRAY);
+    g.fillRect(x + 5, y + 30,  8, 4);
+    g.fillRect(x + 23, y + 30,  8, 4);
   }
 
   public int attack() { return wrapped.attack(); }
