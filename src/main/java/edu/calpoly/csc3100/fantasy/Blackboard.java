@@ -6,6 +6,7 @@ import java.util.*;
 /**
  * Player state and change notifications. The application confines access to the Swing EDT.
  * @author CSC 3100 Instructional Team
+ * @author Marcus Hauen-Limkilde (moveLocal, equipLocal, unequipLocal)
  * @version 1.0
  */
 public final class Blackboard extends PropertyChangeSupport {
@@ -54,11 +55,28 @@ public final class Blackboard extends PropertyChangeSupport {
     if (!state.player().equals(localUsername)) store(state);
   }
   public void equipLocal(String username, String item) {
-    // TODO: append supported equipment to the local snapshot if absent.
-    // Store the changed snapshot and publish it once.
+    if (!username.equals(localUsername)) return;
+    if (!item.equals("sword") && !item.equals("shield") && !item.equals("shoes")) return;
+
+    PlayerState current = players.get(username);
+    if (current.equipment().contains(item)) return;
+    List<String> equipment = new ArrayList<>(current.equipment());
+    equipment.add(item);
+
+    PlayerState updated = new PlayerState(username,current.type(), current.x(), current.y(), equipment);
+    commitLocal(updated);
   }
   public void unequipLocal(String username, String item) {
-    // TODO: remove the requested item from the local snapshot if present.
-    // Preserve the order of the other items, store the snapshot, and publish it once.
+    if (!username.equals(localUsername)) return;
+    if (!item.equals("sword") && !item.equals("shield") && !item.equals("shoes")) return;
+
+    PlayerState current = players.get(username);
+    if (current == null) return;
+    if (!current.equipment().contains(item)) return;
+    List<String> equipment = new ArrayList<>(current.equipment());
+    equipment.remove(item);
+
+    PlayerState updated = new PlayerState(username,current.type(), current.x(), current.y(), equipment);
+    commitLocal(updated);
   }
 }
