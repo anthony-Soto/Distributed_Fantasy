@@ -36,6 +36,7 @@ public final class Blackboard extends PropertyChangeSupport {
     // TODO: move only the local player one cardinal tile within the board.
     // Store the changed snapshot and publish it once.
   }
+
   public void applyRemote(PlayerState state) {
     if (!state.player().equals(localUsername)) store(state);
   }
