@@ -50,6 +50,7 @@ public final class Blackboard extends PropertyChangeSupport {
     PlayerState updated = new PlayerState(username,current.type(), newX, newY, current.equipment());
     commitLocal(updated);
   }
+
   public void applyRemote(PlayerState state) {
     if (!state.player().equals(localUsername)) store(state);
   }

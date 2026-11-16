@@ -21,7 +21,11 @@ class PlayerCodecTest {
   @ValueSource(strings = {
       "{}",
       "null",
+      "{\"type\":\"warrior\",\"x\":0,\"y\":0,\"equipment\":[]}",
+      "{\"player\":\"bob\",\"x\":0,\"y\":0,\"equipment\":[]}",
       "{\"player\":\"bob\",\"type\":\"warrior\",\"y\":0,\"equipment\":[]}",
+      "{\"player\":\"bob\",\"type\":\"warrior\",\"x\":0,\"equipment\":[]}",
+      "{\"player\":\"bob\",\"type\":\"warrior\",\"x\":0,\"y\":0}",
       "{\"player\":\"\",\"type\":\"warrior\",\"x\":0,\"y\":0,\"equipment\":[]}",
       "{\"player\":\"bob\",\"type\":\"dragon\",\"x\":0,\"y\":0,\"equipment\":[]}",
       "{\"player\":\"bob\",\"type\":\"warrior\",\"x\":-1,\"y\":0,\"equipment\":[]}",
@@ -31,5 +35,9 @@ class PlayerCodecTest {
   })
   void rejectsInvalidSnapshots(String json) {
     assertThrows(IllegalArgumentException.class, () -> PlayerCodec.decode(json));
+  }
+
+  @Test void rejectsNullJson() {
+    assertThrows(IllegalArgumentException.class, () -> PlayerCodec.decode(null));
   }
 }
