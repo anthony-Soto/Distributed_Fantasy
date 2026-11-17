@@ -69,5 +69,5 @@ Run `mvn -B test-compile` to verify that the untouched starter and tests compile
 - [x] Replace Docker console mode with Swing + Xvfb + lightweight desktop + noVNC.
 - [x] Provide complete instructor acceptance tests and require exactly three additional student tests.
 - [x] Update CI to test, package, build container, and smoke-test noVNC.
-- [ ] Verify IDE ↔ Docker bidirectional MQTT demonstration.
+- [x] Verify IDE ↔ Docker bidirectional MQTT demonstration.
 
