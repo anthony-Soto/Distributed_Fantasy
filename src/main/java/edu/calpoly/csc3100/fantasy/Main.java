@@ -16,6 +16,14 @@ public final class Main {
   private Main() { }
 
   public static void main(String[] args) throws Exception {
+    // DEBUG-KEYS (temporary): log key + focus events to target/keydebug.log
+    java.awt.Toolkit.getDefaultToolkit().addAWTEventListener(e -> {
+      try {
+        java.nio.file.Files.writeString(java.nio.file.Path.of("target/keydebug.log"),
+            e.getID() + " " + e.paramString() + " src=" + e.getSource().getClass().getSimpleName() + "\n",
+            java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
+      } catch (Exception ignored) { }
+    }, java.awt.AWTEvent.KEY_EVENT_MASK | java.awt.AWTEvent.WINDOW_FOCUS_EVENT_MASK);
     String username = System.getenv().getOrDefault("PLAYER",
         "player-" + UUID.randomUUID().toString().substring(0, 8));
     String team = System.getenv().getOrDefault("TEAM", "demo");
@@ -52,6 +60,7 @@ public final class Main {
     JPanel controls = new JPanel();
     for (String item : List.of("sword", "shield", "shoes")) {
       JCheckBox toggle = new JCheckBox(item);
+      toggle.setFocusable(false); // a focused checkbox swallows arrow keys before the board's bindings see them
       toggle.addActionListener(event -> {
         if (toggle.isSelected()) blackboard.equipLocal(username, item);
         else blackboard.unequipLocal(username, item);
