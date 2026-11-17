@@ -71,3 +71,5 @@ Run `mvn -B test-compile` to verify that the untouched starter and tests compile
 - [x] Update CI to test, package, build container, and smoke-test noVNC.
 - [x] Verify IDE ↔ Docker bidirectional MQTT demonstration.
 
+
+<img width="1792" height="907" alt="image" src="https://github.com/user-attachments/assets/75022c80-5fec-4d09-8880-61ce755e2e91" />
