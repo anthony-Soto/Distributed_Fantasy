@@ -19,10 +19,6 @@ public final class PlayerCodec {
     catch (Exception e) { throw new IllegalArgumentException("Cannot encode player", e); }
   }
   public static PlayerState decode(String json) {
-    // TODO: decode JSON and validate the required fields, type, board coordinates,
-    // and equipment before returning a snapshot. See the README and acceptance tests.
-    
-
     PlayerState state;
     try {
       JsonNode root = MAPPER.readTree(json);
