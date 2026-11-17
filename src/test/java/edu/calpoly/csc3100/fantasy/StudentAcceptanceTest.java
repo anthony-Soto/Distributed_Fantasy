@@ -39,4 +39,19 @@ class StudentAcceptanceTest {
     Character characterWithoutSword = CharacterFactory.create(board.getPlayer("alice"));
     assertEquals(10, characterWithoutSword.attack());
   }
+  @Test void remoteSnapshotReachesBoardWithoutEchoAndBadMessagesAreIgnored() {
+  IncomingPlayerHandler handler =
+      new IncomingPlayerHandler("team", "alice", board::applyRemote);
+  String bobTopic = Subscriber.topicPrefix("team") + "bob";
+  PlayerState bob = new PlayerState("bob", "warrior", 5, 5, List.of("shield"));
+
+  handler.accept(bobTopic, PlayerCodec.encode(bob).getBytes(java.nio.charset.StandardCharsets.UTF_8));
+  handler.accept(bobTopic, "not json".getBytes(java.nio.charset.StandardCharsets.UTF_8));
+  
+  assertAll( 
+    () -> assertEquals(bob, board.getPlayer("bob")),
+    () -> assertEquals(1, sent.size()),
+    () -> assertEquals(2, events.size())
+  );
+}
 }
