@@ -1,6 +1,63 @@
 # CSC 3100 — A04 Distributed Fantasy Adventure
 
-> **Instructor starter template — intentionally incomplete.** Students use TDD to make the provided JUnit acceptance tests pass. The application is a small distributed visualization, **not a game engine**.
+[![Java and noVNC CI](https://github.com/anthony-Soto/Distributed_Fantasy/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/anthony-Soto/Distributed_Fantasy/actions/workflows/ci.yml)
+
+Two Java Swing clients, one in IntelliJ and one in Docker/noVNC, share two fantasy characters through MQTT. Built with TDD against the instructor acceptance suite plus three team tests.
+
+## Team
+
+| Partner | Responsibilities |
+|---|---|
+| Marcus Hauen-Limkilde (Partner A) | One-tile movement and Blackboard events; Sword/Shield/Shoes decorators; equipment changes |
+| Anthony Soto (Partner B) | Snapshot decoding (`PlayerCodec`); subscriber handling (`IncomingPlayerHandler`); MQTT synchronization and Docker/noVNC demo |
+
+Both partners chose and wrote the three tests in `StudentAcceptanceTest.java` and reviewed each other's pull requests.
+
+## Run our demo
+
+Requirements: Java 21, Maven, and Docker Desktop (or Docker Engine with Compose). Both clients must use the same `TEAM` and different `PLAYER` names.
+
+| Variable | Local client | Docker client |
+|---|---|---|
+| `TEAM` | `df-a04-k7q2` | `df-a04-k7q2` |
+| `PLAYER` | `alice` | `bob` |
+
+1. **Local client (Alice).** In IntelliJ, run `edu.calpoly.csc3100.fantasy.Main` with environment variables `TEAM=df-a04-k7q2;PLAYER=alice`, or from a terminal:
+
+   ```sh
+   TEAM=df-a04-k7q2 PLAYER=alice mvn compile exec:java
+   ```
+
+2. **Docker client (Bob).** In a second terminal:
+
+   ```sh
+   mvn -B package
+   TEAM=df-a04-k7q2 PLAYER=bob docker compose up --build
+   ```
+
+3. **Open noVNC** at <http://localhost:6080/vnc.html?autoconnect=1> and click the board.
+
+Use the arrow keys to move the local player one tile and the checkboxes to add or remove Sword, Shield, and Shoes. Changes from either client appear on both boards. When finished, close the Swing window and run `docker compose down`.
+
+## Run the tests
+
+```sh
+mvn -B -Djava.awt.headless=true test
+```
+
+61 tests: the 58 instructor acceptance cases plus 3 team tests in `StudentAcceptanceTest.java`.
+
+## Evidence
+
+**Both players on both boards** (IntelliJ client and Docker/noVNC client):
+
+<img width="1792" height="907" alt="Alice and Bob shown on the local Swing client and the noVNC Docker client" src="https://github.com/user-attachments/assets/75022c80-5fec-4d09-8880-61ce755e2e91" />
+
+**Passing test suite** (61 run, 0 failures, 0 errors):
+
+![mvn test: 61 tests run, 0 failures, 0 errors](docs/junit-61-passing.png)
+
+---
 
 ## Learning goals
 
@@ -70,6 +127,3 @@ Run `mvn -B test-compile` to verify that the untouched starter and tests compile
 - [x] Provide complete instructor acceptance tests and require exactly three additional student tests.
 - [x] Update CI to test, package, build container, and smoke-test noVNC.
 - [x] Verify IDE ↔ Docker bidirectional MQTT demonstration.
-
-
-<img width="1792" height="907" alt="image" src="https://github.com/user-attachments/assets/75022c80-5fec-4d09-8880-61ce755e2e91" />
